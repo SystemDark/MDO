@@ -49,21 +49,45 @@
       </div>
 
       <button type="submit">Salvar Pontuação</button>
+      
     </form>
+  </section>
+
+  <!-- PRESENÇA -->
+  <section class="card">
+    <h2>📅 Controle de Presença</h2>
+    <select id="nomePresenca"></select>
+    <div class="grid">
+      <button type="button" onclick="marcarPresenca()">Marcar Presença</button>
+      <button type="button" onclick="marcarFalta()">Marcar Falta</button>
+    </div>
   </section>
 
   <!-- RANKING -->
   <section class="card">
     <h2>🏆 Ranking anual</h2>
-    <ul id="ranking"></ul>
+    <div id="ranking"></div>
   </section>
 
 </main>
 
-<link rel="stylesheet" href="style.css">
-
 <script type="module" src="firebase.js"></script>
 <script type="module" src="script.js"></script>
+
+<!-- MODAL EDITAR -->
+<div class="modal" id="modalEditar">
+    <div class="modal-content">
+        <h3>Editar Membro</h3>
+        <input type="text" id="editNome" placeholder="Nome">
+        <input type="number" id="editM" placeholder="Meditação">
+        <input type="number" id="editD" placeholder="Decoração">
+        <input type="number" id="editO" placeholder="Oração">
+        <div class="grid">
+            <button onclick="salvarEdicao()">Salvar</button>
+            <button onclick="fecharModal()">Cancelar</button>
+        </div>
+    </div>
+</div>
 
 </body>
 </html>
