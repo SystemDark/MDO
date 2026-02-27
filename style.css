@@ -2,14 +2,14 @@
     --verde: #1b5e20;
     --verde-claro: #2e7d32;
     --bg: #f4f6f8;
-    --ouro: #ffd700;
-    --prata: #c0c0c0;
-    --bronze: #cd7f32;
+    --branco: #ffffff;
+    --cinza: #e0e0e0;
+    --sombra: 0 4px 12px rgba(0,0,0,0.08);
 }
 
 * {
     box-sizing: border-box;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    font-family: "Segoe UI", Roboto, sans-serif;
 }
 
 body {
@@ -21,112 +21,135 @@ header {
     background: linear-gradient(135deg, var(--verde), var(--verde-claro));
     color: white;
     text-align: center;
-    padding: 22px 12px;
+    padding: 25px 15px;
 }
 
 header h1 {
     margin: 0;
-    font-size: 22px;
+    font-size: 26px;
 }
 
 header p {
-    margin: 5px 0 0;
+    margin: 6px 0 0;
     opacity: 0.9;
-    font-size: 14px;
 }
 
 main {
-    padding: 12px;
+    max-width: 700px;
+    margin: auto;
+    padding: 20px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    max-width: 600px;
-    margin: auto;
+    gap: 20px;
 }
 
-/* CARDS */
 .card {
-    background: white;
-    padding: 15px;
-    border-radius: 12px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    background: var(--branco);
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: var(--sombra);
 }
 
 h2 {
     margin-top: 0;
-    font-size: 16px;
-}
-
-/* FORM */
-form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
 }
 
 input, select, button {
     padding: 12px;
-    font-size: 16px;
-    border-radius: 8px;
+    border-radius: 10px;
+    font-size: 15px;
 }
 
 input, select {
-    border: 1px solid #ddd;
+    border: 1px solid var(--cinza);
+    width: 100%;
 }
 
 button {
     border: none;
+    cursor: pointer;
     background: var(--verde-claro);
     color: white;
     font-weight: bold;
+    transition: 0.2s;
 }
 
-button:active {
-    transform: scale(0.98);
+button:hover {
+    opacity: 0.9;
 }
 
-/* GRID MDO */
-    .grid {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+.grid {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
 }
 
-
-/* RANKING */
-ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-li {
-    padding: 10px;
-    border-bottom: 1px solid #eee;
-}
-
-.top1 { background: rgba(255, 215, 0, 0.15); }
-.top2 { background: rgba(192, 192, 192, 0.15); }
-.top3 { background: rgba(205, 127, 50, 0.15); }
-
-/* STATS */
 .stats {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 10px;
+    gap: 15px;
 }
 
 .stats div {
-    background: white;
-    padding: 15px;
+    background: var(--branco);
+    padding: 20px;
+    border-radius: 16px;
     text-align: center;
-    border-radius: 12px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    box-shadow: var(--sombra);
 }
 
 .stats strong {
-    display: block;
-    font-size: 20px;
+    font-size: 22px;
     color: var(--verde);
 }
 
+/* RANKING */
+.ranking-card {
+    padding: 15px;
+    border-radius: 14px;
+    background: #fafafa;
+    margin-bottom: 10px;
+    border-left: 5px solid var(--verde-claro);
+}
+
+.ranking-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.ranking-header strong {
+    font-size: 16px;
+}
+
+.small {
+    font-size: 13px;
+    opacity: 0.8;
+}
+
+.btn-editar {
+    background: #1565c0;
+    padding: 6px 12px;
+    font-size: 13px;
+}
+
+/* MODAL */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: white;
+    padding: 25px;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 400px;
+}
