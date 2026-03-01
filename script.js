@@ -89,18 +89,18 @@ function atualizarRanking() {
         let card = document.createElement("div");
         card.className = "ranking-card";
 
-        card.innerHTML = `
-      <div class="ranking-header">
-        <strong>#${pos} - ${pessoa.nome}</strong>
-        <button class="btn-editar" onclick="abrirModal('${id}')">Editar</button>
-      </div>
-      <div class="small">
-        M${pessoa.M} | D${pessoa.D} | O${pessoa.O} | Total: ${total}
-      </div>
-      <div class="small">
-        Presenças: ${pessoa.presencas || 0} | Faltas: ${pessoa.faltas || 0}
-      </div>
-    `;
+        card.innerHTML=`
+<div>
+<strong>#${pos} ${pessoa.nome}</strong><br>
+M${pessoa.M} - D${pessoa.D} - O${pessoa.O}
+<br>
+P${(pessoa.presencas||[]).length} - F${(pessoa.faltas||[]).length}
+</div>
+
+<div>
+<button onclick="editarPessoa('${id}')">Editar</button>
+</div>
+`;
 
         rankingDiv.appendChild(card);
         pos++;
@@ -171,6 +171,16 @@ function limparCampos() {
     document.getElementById("meditacao").value = "";
     document.getElementById("decoracao").value = "";
     document.getElementById("oracao").value = "";
+}
+
+window.deletarPessoa = function(id,nome){
+
+let confirmar = confirm(`Tem certeza que deseja excluir ${nome}?`);
+
+if(!confirmar) return;
+
+remove(ref(db,"pessoas/"+id));
+
 }
 
 document.addEventListener("DOMContentLoaded", () => {
