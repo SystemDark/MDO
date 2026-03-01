@@ -1,173 +1,203 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
-
-import {
-getDatabase,
-ref,
-push,
-set,
-onValue,
-update
-}
-from "https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js";
-
-const firebaseConfig = {
-apiKey: "SUA_API_KEY",
-authDomain: "mdo-acro.firebaseapp.com",
-databaseURL: "https://mdo-acro-default-rtdb.firebaseio.com",
-projectId: "mdo-acro",
-storageBucket: "mdo-acro.firebasestorage.app",
-messagingSenderId: "957477543792",
-appId: "1:957477543792:web:8009e8d70c2cc4e295f9b5"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
+import { db, ref, push, set, update, onValue, remove } from "./firebase.js";
 
 let pessoas = {};
 let editandoID = null;
 
-const pessoasRef = ref(db,"pessoas");
+const pessoasRef = ref(db, "pessoas");
 
-onValue(pessoasRef,(snapshot)=>{
-pessoas = snapshot.val() || {};
-atualizarLista();
-atualizarRanking();
+onValue(pessoasRef, (snapshot) => {
+  pessoas = snapshot.val() || {};
+  atualizarLista();
+  atualizarRanking();
+  atualizarResumo();
 });
 
-window.adicionarPessoa = function(){
 
-let nome = document.getElementById("novoNome").value;
-if(nome=="")return;
+// ================= ADICIONAR MEMBRO =================
+document.getElementById("formAdd").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const nome = document.getElementById("novoNome").value.trim();
+  if (!nome) return;
 
-let novaRef = push(pessoasRef);
+  const novaRef = push(pessoasRef);
 
-set(novaRef,{
-nome:nome,
-M:0,
-D:0,
-O:0,
-P:0,
-F:0
+  set(novaRef, {
+    nome,
+    M: 0,
+    D: 0,
+    O: 0,
+    P: 0,
+    F: 0
+  });
+
+  document.getElementById("novoNome").value = "";
 });
 
-document.getElementById("novoNome").value="";
+
+// ================= LANÇAR MDO =================
+document.getElementById("formMDO").addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  const id = document.getElementById("nome").value;
+  if (!id) return;
+
+  const M = parseInt(document.getElementById("meditacao").value) || 0;
+  const D = parseInt(document.getElementById("decoracao").value) || 0;
+  const O = parseInt(document.getElementById("oracao").value) || 0;
+
+  const pessoa = pessoas[id];
+
+  update(ref(db, "pessoas/" + id), {
+    M: pessoa.M + M,
+    D: pessoa.D + D,
+    O: pessoa.O + O
+  });
+
+  limparCampos();
+});
+
+
+// ================= PRESENÇA =================
+window.marcarPresenca = function () {
+  const id = document.getElementById("nomePresenca").value;
+  if (!id) return;
+
+  const pessoa = pessoas[id];
+
+  update(ref(db, "pessoas/" + id), {
+    P: (pessoa.P || 0) + 1
+  });
 };
 
-window.lancarMDO = function(){
+window.marcarFalta = function () {
+  const id = document.getElementById("nomePresenca").value;
+  if (!id) return;
 
-let id = document.getElementById("nomePessoa").value;
-if(!id)return;
+  const pessoa = pessoas[id];
 
-let M = parseInt(document.getElementById("meditacao").value)||0;
-let D = parseInt(document.getElementById("decoracao").value)||0;
-let O = parseInt(document.getElementById("oracao").value)||0;
-
-let pessoa = pessoas[id];
-
-update(ref(db,"pessoas/"+id),{
-M:pessoa.M+M,
-D:pessoa.D+D,
-O:pessoa.O+O
-});
-
-limparCampos();
+  update(ref(db, "pessoas/" + id), {
+    F: (pessoa.F || 0) + 1
+  });
 };
 
-window.marcarPresenca = function(){
 
-let id = document.getElementById("nomePessoa").value;
-if(!id)return;
+// ================= LISTA =================
+function atualizarLista() {
+  const selectMDO = document.getElementById("nome");
+  const selectPresenca = document.getElementById("nomePresenca");
 
-let pessoa = pessoas[id];
+  selectMDO.innerHTML = "";
+  selectPresenca.innerHTML = "";
 
-update(ref(db,"pessoas/"+id),{
-P:pessoa.P+1
-});
-};
+  for (let id in pessoas) {
+    const option1 = document.createElement("option");
+    option1.value = id;
+    option1.innerText = pessoas[id].nome;
 
-window.marcarFalta = function(){
+    const option2 = option1.cloneNode(true);
 
-let id = document.getElementById("nomePessoa").value;
-if(!id)return;
-
-let pessoa = pessoas[id];
-
-update(ref(db,"pessoas/"+id),{
-F:pessoa.F+1
-});
-};
-
-function atualizarLista(){
-let select = document.getElementById("nomePessoa");
-select.innerHTML="";
-
-for(let id in pessoas){
-let option=document.createElement("option");
-option.value=id;
-option.innerText=pessoas[id].nome;
-select.appendChild(option);
-}
-}
-
-function atualizarRanking(){
-
-let rankingDiv=document.getElementById("ranking");
-rankingDiv.innerHTML="";
-
-let lista = Object.entries(pessoas);
-
-lista.sort((a,b)=>{
-let totalA=a[1].M+a[1].D+a[1].O;
-let totalB=b[1].M+b[1].D+b[1].O;
-return totalB-totalA;
-});
-
-let pos=1;
-
-lista.forEach(([id,pessoa])=>{
-
-let card=document.createElement("div");
-card.className="card";
-
-card.innerHTML=`
-<div>
-<strong>#${pos} ${pessoa.nome}</strong><br>
-M${pessoa.M} - D${pessoa.D} - O${pessoa.O}
-<br>
-P${pessoa.P} - F${pessoa.F}
-</div>
-
-<div>
-<button onclick="editarPessoa('${id}')">Editar</button>
-</div>
-`;
-
-rankingDiv.appendChild(card);
-
-pos++;
-
-});
+    selectMDO.appendChild(option1);
+    selectPresenca.appendChild(option2);
+  }
 }
 
-window.editarPessoa = function(id){
 
-let pessoa = pessoas[id];
+// ================= RANKING =================
+function atualizarRanking() {
+  const rankingDiv = document.getElementById("ranking");
+  rankingDiv.innerHTML = "";
 
-let novoM = prompt("Editar Meditação:", pessoa.M);
-let novoD = prompt("Editar Decoração:", pessoa.D);
-let novoO = prompt("Editar Oração:", pessoa.O);
+  const lista = Object.entries(pessoas);
 
-if(novoM===null)return;
+  lista.sort((a, b) => {
+    const totalA = a[1].M + a[1].D + a[1].O;
+    const totalB = b[1].M + b[1].D + b[1].O;
+    return totalB - totalA;
+  });
 
-update(ref(db,"pessoas/"+id),{
-M:parseInt(novoM)||0,
-D:parseInt(novoD)||0,
-O:parseInt(novoO)||0
-});
+  let pos = 1;
+
+  lista.forEach(([id, pessoa]) => {
+
+    const card = document.createElement("div");
+    card.className = "card";
+
+    card.innerHTML = `
+      <div>
+        <strong>#${pos} ${pessoa.nome}</strong><br>
+        M${pessoa.M} - D${pessoa.D} - O${pessoa.O}<br>
+        P${pessoa.P || 0} - F${pessoa.F || 0}
+      </div>
+
+      <div style="display:flex; gap:6px;">
+        <button onclick="abrirModal('${id}')">Editar</button>
+        <button onclick="deletarPessoa('${id}','${pessoa.nome}')" style="background:#c1121f;">Excluir</button>
+      </div>
+    `;
+
+    rankingDiv.appendChild(card);
+    pos++;
+  });
+}
+
+
+// ================= EDITAR =================
+window.abrirModal = function (id) {
+  editandoID = id;
+  const pessoa = pessoas[id];
+
+  document.getElementById("editNome").value = pessoa.nome;
+  document.getElementById("editM").value = pessoa.M;
+  document.getElementById("editD").value = pessoa.D;
+  document.getElementById("editO").value = pessoa.O;
+
+  document.getElementById("modalEditar").style.display = "flex";
 };
 
-function limparCampos(){
-document.getElementById("meditacao").value="";
-document.getElementById("decoracao").value="";
-document.getElementById("oracao").value="";
+window.fecharModal = function () {
+  document.getElementById("modalEditar").style.display = "none";
+};
+
+window.salvarEdicao = function () {
+  if (!editandoID) return;
+
+  update(ref(db, "pessoas/" + editandoID), {
+    nome: document.getElementById("editNome").value,
+    M: parseInt(document.getElementById("editM").value) || 0,
+    D: parseInt(document.getElementById("editD").value) || 0,
+    O: parseInt(document.getElementById("editO").value) || 0
+  });
+
+  fecharModal();
+};
+
+
+// ================= DELETAR =================
+window.deletarPessoa = function (id, nome) {
+  const confirmar = confirm(`Tem certeza que deseja excluir ${nome}?`);
+  if (!confirmar) return;
+
+  remove(ref(db, "pessoas/" + id));
+};
+
+
+// ================= RESUMO =================
+function atualizarResumo() {
+  const totalMembros = Object.keys(pessoas).length;
+
+  let totalGeral = 0;
+  for (let id in pessoas) {
+    totalGeral += pessoas[id].M + pessoas[id].D + pessoas[id].O;
+  }
+
+  document.getElementById("totalMembros").innerText = totalMembros;
+  document.getElementById("totalVersiculos").innerText = totalGeral;
+}
+
+
+// ================= UTIL =================
+function limparCampos() {
+  document.getElementById("meditacao").value = "";
+  document.getElementById("decoracao").value = "";
+  document.getElementById("oracao").value = "";
 }
