@@ -6,7 +6,8 @@ import {
   onValue,
   push,
   update,
-  set, remove // Adicione esta linha
+  set,
+  remove
 } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js";
 
 const firebaseConfig = {
@@ -20,7 +21,6 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-
 const db = getDatabase(app);
 
-export { db, ref, onValue, push, update, set }; // Inclua 'set' aqui
+export { db, ref, onValue, push, update, set, remove };
