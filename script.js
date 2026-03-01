@@ -130,8 +130,10 @@ function atualizarRanking() {
       </div>
 
       <div style="display:flex; gap:6px;">
-        <button onclick="abrirModal('${id}')">Editar</button>
-        <button onclick="deletarPessoa('${id}','${pessoa.nome}')" style="background:#c1121f;">Excluir</button>
+        <button class="btn-small" onclick="abrirModal('${id}')">Editar</button>
+        <button class="btn-small" style="background:#c1121f;" onclick="deletarPessoa('${id}','${pessoa.nome}')">
+Excluir
+</button>
       </div>
     `;
 
