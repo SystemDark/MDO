@@ -17,6 +17,8 @@ body {
     background: var(--bg);
 }
 
+/* ================= HEADER ================= */
+
 header {
     background: linear-gradient(135deg, var(--verde), var(--verde-claro));
     color: white;
@@ -26,13 +28,16 @@ header {
 
 header h1 {
     margin: 0;
-    font-size: 26px;
+    font-size: 24px;
 }
 
 header p {
     margin: 6px 0 0;
     opacity: 0.9;
+    font-size: 14px;
 }
+
+/* ================= LAYOUT ================= */
 
 main {
     max-width: 700px;
@@ -45,32 +50,37 @@ main {
 
 .card {
     background: var(--branco);
-    padding: 20px;
+    padding: 18px;
     border-radius: 16px;
     box-shadow: var(--sombra);
 }
 
 h2 {
     margin-top: 0;
+    font-size: 18px;
 }
 
-input, select, button {
-    padding: 12px;
-    border-radius: 10px;
-    font-size: 15px;
-}
+/* ================= INPUTS ================= */
 
 input, select {
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 14px;
     border: 1px solid var(--cinza);
     width: 100%;
 }
 
+/* ================= BOTÕES ================= */
+
 button {
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 14px;
     border: none;
     cursor: pointer;
     background: var(--verde-claro);
     color: white;
-    font-weight: bold;
+    font-weight: 600;
     transition: 0.2s;
 }
 
@@ -78,11 +88,32 @@ button:hover {
     opacity: 0.9;
 }
 
+/* Botões pequenos (ranking) */
+.btn-small {
+    padding: 5px 10px;
+    font-size: 12px;
+    border-radius: 6px;
+}
+
+/* Botão editar azul */
+.btn-editar {
+    background: #1565c0;
+}
+
+/* Botão excluir vermelho */
+.btn-excluir {
+    background: #c1121f;
+}
+
+/* ================= GRID ================= */
+
 .grid {
     display: flex;
     gap: 10px;
     margin-top: 10px;
 }
+
+/* ================= STATS ================= */
 
 .stats {
     display: grid;
@@ -92,20 +123,21 @@ button:hover {
 
 .stats div {
     background: var(--branco);
-    padding: 20px;
+    padding: 18px;
     border-radius: 16px;
     text-align: center;
     box-shadow: var(--sombra);
 }
 
 .stats strong {
-    font-size: 22px;
+    font-size: 20px;
     color: var(--verde);
 }
 
-/* RANKING */
+/* ================= RANKING ================= */
+
 .ranking-card {
-    padding: 15px;
+    padding: 14px;
     border-radius: 14px;
     background: #fafafa;
     margin-bottom: 10px;
@@ -119,7 +151,7 @@ button:hover {
 }
 
 .ranking-header strong {
-    font-size: 16px;
+    font-size: 15px;
 }
 
 .small {
@@ -127,13 +159,8 @@ button:hover {
     opacity: 0.8;
 }
 
-.btn-editar {
-    background: #1565c0;
-    padding: 6px 12px;
-    font-size: 13px;
-}
+/* ================= MODAL ================= */
 
-/* MODAL */
 .modal {
     position: fixed;
     top: 0;
@@ -144,12 +171,45 @@ button:hover {
     display: none;
     justify-content: center;
     align-items: center;
+    padding: 15px;
 }
 
 .modal-content {
     background: white;
-    padding: 25px;
+    padding: 22px;
     border-radius: 16px;
-    width: 90%;
+    width: 100%;
     max-width: 400px;
+}
+
+.modal-content input {
+    margin-bottom: 10px;
+}
+
+.modal-content button {
+    padding: 7px 12px;
+    font-size: 13px;
+}
+
+/* ================= RESPONSIVO ================= */
+
+@media (max-width: 480px) {
+
+    header h1 {
+        font-size: 20px;
+    }
+
+    h2 {
+        font-size: 16px;
+    }
+
+    button {
+        font-size: 13px;
+        padding: 7px 12px;
+    }
+
+    .btn-small {
+        font-size: 11px;
+        padding: 4px 8px;
+    }
 }
