@@ -6,7 +6,7 @@ import {
   onValue,
   push,
   update,
-  set, // Adicione esta linha
+  set, remove // Adicione esta linha
 } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js";
 
 const firebaseConfig = {
